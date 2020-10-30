@@ -1,0 +1,362 @@
+---
+params:
+  org: RF4
+  showcode: FALSE
+title: "Analysis of org_code  `r params$org`"
+author: "Matthew Francis"
+output:
+  word_document:
+    reference_doc: mytemplate.docx
+    toc: yes
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+# include = FALSE: ensures that code and results don't appear in the knitted document. So when you knit the document this chunk will not appear.
+
+# This is a global option, so this will apply to all of the code chunks in the document
+
+knitr::opts_chunk$set(echo = FALSE)
+n<-0
+```
+
+
+This report was generated on `r format(Sys.Date(),"%d-%m-%Y")`.
+
+
+# Introduction to Markdown
+
+Markdown is a simple way to format and automate common reports and processes. Text can be written in bold or italics, in bullet points or numbered lists. Code can be embedded in documents to perform calculations, read in data and any other processes which you may wish to run, but not want the reader to see. In fact, you can pretty much automate anything you would normally process in a word document. This document has been written as a self help guide with gaps for the reader to undertake some exercises. 
+Markdown can be used to produce documents in different formats such as word, powerpoint, html and PDF, all of which have slightly different syntax and features. This course will focus on the formatting to produce word documents. The exercises will start very basic and gradually get more complex as the course progresses. 
+
+For the analytical content, the NHSRdatasets package will be used.
+
+# Formatting in RMarkdown
+
+The first part of this course will focus on formatting the text. Currently there are no header levels in this document. If you press "Knit" on the toolbar you should see a very plain document.
+
+## Headers in RMarkdown
+
+When writing word documents, such as this, you want to apply different levels to the headers. This can be done using #. # indicates to use level 1 headers, ## for level 2 headers and so on.
+The header levels are set up in the reference document.
+
+
+Exercise `r n+1`: use # so that "Introduction to Markdown" and "Formatting in RMarkdown" are both level 1 headers, and "Headers in RMarkdown" is a level 2 header. You should see the text turn blue. Hit the knit button again to make sure the changes have taken place. You should also see that the "Table of Contents is populated".
+
+
+## Italic and bold text
+
+Font in Markdown can be emphasised using Italics and Bold font. For italics use * either side of the word/phrase, and for bold use ** either side of the word or phrase. 
+
+i.e.
+
+
+Exercise `r n+1`:
+
+*Make this text italic*
+
+**Make this text bold**
+
+
+## Lists
+
+Numbered and bulleted lists can also be added to Markdown documents. For bullet points use * at the beginning of each point to be bulleted, and for numbered lists use 1., 2. etc at the beginning of each point to be numbered. For sub-bullets indent and use **+**.
+
+**NB: markdown detects if numbers are missing so if the numbers are 1., 2., 5..... markdown will detect that 3 and 4 are missing so replace the 5 with a 3.**
+
+Exercise 3a: make this a bulleted list
+
+* RMarkdown is really easy and is going to change my life!  
+* We haven't got onto messing about with data yet though!  
+
+Exercise 3b: make this a numbered list
+
+1. This is item 1  
+2. This is item 2  
+5. This is item 3  
+  + This is getting pretty boring now!
+  + This is ............
+
+# Working with paragraphs  
+When writing markdown documents, new paragraphs can be created by ending the preceding sentence with a double space.
+
+i.e. I have ended this sentence with one space and pressed return. 
+I have ended this sentence with a double space and pressed return.  
+  
+And here is the new paragraph.
+
+
+# Setting the reference document
+RMarkdown can read in reference documents for generating reports - these may be "house style" templates for example. These are called in the **output** section of the document settings.
+You can also set the level of headers to display in the table of contents using toc_depth. 
+
+output:  
+  word_document:
+    reference_doc: mytemplate.docx  
+    toc: yes  
+    toc_depth: 1
+    
+Exercise: edit the output at the top of the script to read in the my_template.docx template. Hit the Knit button.
+
+# Working with data
+
+When working with and manipulating data in Markdown separate code chunks need to be set up. This is done using the three **`** (located at the top left of the keyboard, **NOT** the apostrophe).
+
+Let's set up a code chunk!
+
+```{r testcode, echo=params$showcode, message=FALSE, warning=FALSE}
+# this is the first code chunk
+# use the cog to set chunk options
+```
+
+
+```{r code1, echo=params$showcode}
+# The chunk is created using ```{r code1, echo=TRUE}
+# code1 is what I've called this chunk, and echo=TRUE allows you to see this code! Close the code chunk by inserting ``` at the bottom
+# i.e. ```
+```
+
+That's how easy it is to set up a code chunk. We are now going to set up a code chunk to read in some data
+
+Exercise 4:
+
+In the code below, the library has been set for the NHSRdatasets. Complete the code to return the top 6 records of the dataset.
+```{r read_data, echo=params$showcode}
+# load the library for NHSRdatasets
+library(NHSRdatasets)
+# Print the top six records of the ae_attendances dataset and print these to the word document.
+
+#head(ae_attendances, 10)
+
+# use the function head()
+
+top6<-head(ae_attendances)
+
+print(top6)
+```
+
+We can also embed r results and calculations into the word text. For example, assume we wanted to state how many records there are in the ae_attendances dataset.
+
+```{r embedr, echo=params$showcode}
+# To embed r results in code use `r .....`
+# Let's count the number of records in the ae_attendances dataset
+
+ae_count<-nrow(ae_attendances)
+# and format so the number has commas
+ae_count<-formatC(ae_count, big.mark = ",")
+
+```
+
+There are `r ae_count` records in the ae_attendances dataset. This is quite an easily calculation so we could have written this without a code chunk.
+
+i.e. There are `r formatC(nrow(ae_attendances), big.mark=",")` records in the ae_attendances dataset. 
+
+Exercise 5:
+
+```{r field_count, echo=params$showcode}
+# Find the number of fields in the ae_attendances dataset and print this to the word document
+# ae_count<-nrow(ae_attendances)
+# use the function ncol()
+ae_fields<-ncol(ae_attendances)
+
+```
+
+There are `r ae_fields` fields in the ae_attendances dataset.
+
+```{r ae_analysis, echo=params$showcode}
+# We can do other analyses on the dataset and return the results to this report
+
+
+```
+
+## A bit on dplyr
+
+It has already been established that Markdown is really useful for automating outputs. In order to pull data through from datasets and perform calculations, it would be beneficial to gain a basic understanding of the dplyr package. 
+
+dplyr is a package which allows the manipulation and analysis of datasets. It is driven by five key verbs:
+  * select - return particular variables from a dataset
+  * filter - apply filters to the dataset
+  * summarise - perform regular stats such as sum, count, mean, median
+  * mutate - changes the dataset by adding new variables
+  * arrange - orders the dataset
+and each of these has other functions.  
+
+Exercise 6:
+
+```{r ae_analysis2, echo=params$showcode, message=FALSE, warning=FALSE}
+library(dplyr)
+# Let's start with an easy one. How many org_codes are there in the dataset?
+
+orgs<-ae_attendances%>%
+        summarise(org=n_distinct(org_code))
+
+# Exercise 6:
+
+#### find the total number of attendances in the dataset
+att<-ae_attendances%>%
+        summarise(att_total=sum(attendances))
+
+#### average attendance at each org_code
+
+avg_at<- att$att_total / orgs$org
+options("scipen"=100, "digits"=0)
+```
+
+There are `r orgs$org` unique organisation codes in the ae_attendances dataset with a total of `r att`  , resulting in an average attendance of `r avg_at`. 
+
+```{r org_code_att,echo=params$showcode}
+# Find the org_code with the most attendances
+org_by_att<-ae_attendances%>%
+            group_by(org_code)%>%
+            summarise(tot_att=sum(attendances))
+
+org_breaches<-ae_attendances%>%
+            group_by(org_code)%>%
+            summarise(tot_brch=sum(breaches))
+
+head(ae_attendances)
+
+```
+
+The hospital with the most attendances was `r org_by_att$org_code[which.max(org_by_att$tot_att)]`
+
+Exercise 7: print a statement showing the hospital with the minimum number of breaches
+
+The hospital with the least number of breaches was `r org_breaches$org_code[which.min(org_breaches$tot_brch)]`
+
+# Setting up parameters
+
+One of the major advantages of Markdown is its ability to automate documents for multiple areas. Parameters are declared at the top of the script (below the title section).
+
+We are going to set up a parameter for "showcode". 
+
+Exercise 7: set up the parameters at the top of the script. (We will use this later)
+
+title:......
+params: 
+  showcode: TRUE
+......  
+
+We can now pass parameters into the code using the r syntax using the back tick. 
+
+
+# Analysis of `r params$org`
+
+This report will focus on hospital `r params$org`.
+
+Then, we can pass this argument into the dplyr functions (using the filter argument) so we can limit the dataset to just `r params$org`.
+
+Exercise 8: adapt the code below to filter on the parameter.
+
+```{r pass_params, echo=params$showcode}
+
+org_tot<-ae_attendances%>%
+        filter(org_code==params$org )%>%
+         summarise(tot_att=sum(attendances))
+org_tot$tot_att
+```
+
+In the ae_attendances dataset there were `r org_tot` attendances relating to hospital `r params$org`.
+
+Now, the data contain the attendances at `r params$org` between the months `r min(ae_attendances$period)` and `r max(ae_attendances$period)`. Before we do anything with this, let's get the data into month/year format. 
+
+```{r format_date, echo=params$showcode}
+# Format the date
+org_data<-ae_attendances%>%
+          filter(org_code==params$org)%>%
+          mutate(month=format(as.Date(period),"%Y-%m"))
+
+```
+
+Exercise 9: 
+Using the new field "month" create above, rewrite the sentence: 
+
+The data contain the attendances at `r params$org` between the months `r min(org_data$month)` and `r max(org_data$month)`. 
+
+The dataset contains a field "type", where 1 denotes an inpatient admission, 2 denotes an emergency admission, and other.
+
+Exercise 10: complete the sentence below
+
+```{r exercise 10, echo=params$showcode}
+###calculations for exercise 10
+##Hint: use filter and summarise
+
+# inpatients
+d1<-ae_attendances%>%
+        filter(org_code==params$org, type==1)%>%
+        summarise(tot=sum(attendances))
+                
+d2<-ae_attendances%>%
+        filter(org_code==params$org, type==2)%>%
+        summarise(tot=sum(attendances))
+
+                    
+```
+
+At `r params$org` there were `r d1$tot` inpatient admissions and `r d2$tot` emergency admissions. 
+
+## Breaches at `r params$org` 
+
+```{r breaches, echo=params$showcode}
+# calculate breaches as a proportion of attendances and group by month and type
+library(scales)
+library(knitr)
+org_performance<- org_data%>%
+                  group_by(month,type)%>%
+summarise(Att=sum(attendances), Brch=sum(breaches), brchp=percent(Brch/Att))%>%
+
+head(15)%>%
+kable()
+
+org_performance
+```
+
+# Importing images  
+  
+Images can be imported simply by using 
+
+![]()
+
+You can give your image a caption within the [], and state the name of the file for importing within the ().
+
+![This is the accompanying text](Hospital.png)
+
+
+  
+# Remove all of the code from your report
+
+It may get tedious going through the code and setting the showcode chunks to *FALSE*. Therefore, we can use the parameter at the top of the script **showcode** and pass this into each chunk argument, by setting **echo=params$showcode**. 
+
+Exercise n: go through the code chunks and automate the code chunks to switch off.
+
+# Passing parameters into the document title
+
+R code must be written in the order it is required. If you try and call an object before it has been loaded then R will throw an error. Therefore, to pass parameters into the title, they have to be declared first.
+
+Exercise n: 
+
+Therefore, simply declare the parameters first, as follows:
+
+params:
+  org: "RF4"
+  showcode: TRUE
+
+title: "Analysis of Hospital -  `r params$org`"
+author: "LKIS"
+
+Exercise n+1:
+As you can see, this module has been developed iteratively and the exercise numbers are all out of sync. Can you think of a way to automate this?
+
+Once you are familiar with the basics of R and Markdown, aspects of automation are problem solving challenges!
+
+# Spell check your document
+To the top of the file (next to the save disk) there is an "ABC" button with a tick below it. Click this to perform a spell check.
+
+Delberate splling mstake
+
+
+# Where to find more information
+
+Find more information at https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf
+
+A great resource for formatting tables : https://cran.r-project.org/web/packages/flextable/vignettes/overview.html
